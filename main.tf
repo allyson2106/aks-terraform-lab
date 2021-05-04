@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "2.57.0"
+      version = "2.5.0"
     }
   }
 }
@@ -33,7 +33,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   default_node_pool {
     name       = "default"
     node_count = var.agentnode
-    vm_size    = "Standard_A2_v2"
+    vm_size    = "Standard_D2_v2"
     
   }
 
@@ -45,14 +45,13 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     Environment = "Production"
   }
 }
-resource "azurerm_kubernetes_cluster_node_pool" "nodepool" {
-  name                  = "linuxnodes"
+resource "azurerm_kubernetes_cluster_node_pool" "linux" {
+  name                  = "usernode"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
-  vm_size               = var.size
-  node_count            = 2
-  priority              = "Spot"
+  vm_size               = "Standard_DS1_v2"
+  node_count            = 3
 
   tags = {
-    Environment = "Production"
+    Environment = "Homolog"
   }
 }
